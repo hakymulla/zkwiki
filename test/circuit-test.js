@@ -7,7 +7,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 // const { generateWitness } = require('/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/generate_witness')
 
-const wc  = require("/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/witness_calculator.js");
+// const wc  = require("/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/witness_calculator.js");
 const { assert } = require('console');
 // const { stringifyBigInts, prove, verify, formatMessage, getCallData } = require('/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/ts/utils');
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
@@ -90,24 +90,27 @@ describe("SendMessage", function () {
         msgheader: formatMessage(msg),   
     };
 
-    let generateWitnessSuccess = true;
-    let witness = await generateWitness(input).then()
-    .catch((error) => {
-        console.error("ERROR:  ",error);
-        generateWitnessSuccess = false;
-    });
+    // let generateWitnessSuccess = true;
+    // let witness = await generateWitness(input).then()
+    // .catch((error) => {
+    //     console.error("ERROR:  ",error);
+    //     generateWitnessSuccess = false;
+    // });
 
-    const { proof, publicSignals } = await groth16.prove(sendzkey, witness);
+    // const { proof, publicSignals } = await groth16.prove(sendzkey, witness);
     // console.log("Proof: ", proof);
     // console.log("Pub: ", publicSignals);
 
+    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+
+
     const vKey = JSON.parse(readFileSync(sendvkey));
-    const res = await groth16.verify(vKey, publicSignals, proof);
-    const msgHash = publicSignals[0]
+    const res = await groth16.verify(vKey, send.publicSignals, send.proof);
+    const msgHash = send.publicSignals[0]
     console.log("msgHash: ", msgHash)
     console.log("Res: ", res)
 
-    const calldata = await getCallData(proof, publicSignals);
+    let calldata = await getCallData(send.proof, send.publicSignals);
     // console.log(calldata);
 
     // Reveal Message
@@ -124,6 +127,8 @@ describe("SendMessage", function () {
     const reveal_result = await groth16.verify(reveal_vKey, reveal.publicSignals, reveal.proof);
     console.log(reveal_result);
     assert(reveal_result == true)
+    const calldata1 = await getCallData(reveal.proof, reveal.publicSignals);
+    // console.log(calldata1);
 
   });
 });
