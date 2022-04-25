@@ -1,26 +1,28 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
-import "./sendVerifier.sol";
 
-contract Message{
+import "./sendVerifier.sol";
+import "./revealVerifier.sol";
+
+contract Message {
 
     SendVerifier sendVerifier;
+    RevealVerifier revealVerifier;
+    
     uint256[] public users;
     mapping(uint256 => bool) userExists;
 
     struct MessageStruct {
-        uint256 user;
-        string text;
         bool isrevealed;
-        uint256 secret;
         uint256 msghash;
-
     }
+    
     MessageStruct[] public messages;
 
-    constructor(address _sendVerifier) {
+    constructor(address _sendVerifier, address _revealVerifier) {
         sendVerifier = SendVerifier(_sendVerifier);
+        revealVerifier = RevealVerifier(_revealVerifier);
     }
 
     function createUser() public {
@@ -36,23 +38,32 @@ contract Message{
     }
 
     function sendMessage(
-        string memory _message,
-        uint256[2] memory _a,
-        uint256[2][2] memory _b,
-        uint256[2] memory _c,
-        uint256[4] memory _input 
+        uint[2] memory _a,
+        uint[2][2] memory _b,
+        uint[2] memory _c,
+        uint[2] memory _input
     ) public {
-        uint256 userhash = uint256(keccak256(abi.encodePacked(msg.sender)));
-        require(userExists[userhash], "User must be registered");
-        // require(!msgAttestations[_input[0]], "Please change salt, must have unique msgAttestation");
         require(sendVerifier.verifyProof(_a, _b, _c, _input), "Invalid Message Proof");
-        // msgAttestations[_input[0]] = true;
 
         MessageStruct memory message;
-        message.user = userhash;
-        message.text = _message;
         message.msghash = _input[0];
         messages.push(message);
     }
+
+    function revealMessage(
+        uint[2] memory _a,
+        uint[2][2] memory _b,
+        uint[2] memory _c,
+        uint[2] memory _input
+    ) public {
+        require(revealVerifier.verifyProof(_a, _b, _c, _input), "Invalid Reveal Proof");
+        for (uint i = 0; i < messages.length; i++) {
+            if (messages[i].msghash == _input[1]) {
+                MessageStruct storage message = messages[i];
+                message.isrevealed = true;
+                break;
+            }
+        }
+    }    
 
 }
