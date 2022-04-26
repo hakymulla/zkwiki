@@ -1,16 +1,14 @@
-# Basic Sample Hardhat Project
+# ZKWiki
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+This is a decentralized application that will allow anyone to anonymously post information. 
 
-Try running some of the following tasks:
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
-# zkwiki
+## Project Components
+1. Circuits
+2. Contracts
+3. Frontend
+
+## Use Cases
+This is a decentralized application that will allow anyone to anonymously post information 
+
+ - Users can anonymously post a detailed title and a full message, the full message will remain hidden until the user chooses to reveal it. This use case is valid if the full message has top secret information or might endanger human lives but wants part of the story to go public. User can then reveal this information after a while.

@@ -73,7 +73,9 @@ const MainBar = ({ accounts, setAccounts }) => {
     }
 
     return (
-        <main className="main">
+        <div class="split left">
+
+        <div className="main">
 
             <form className="form" >             
                 <input 
@@ -83,13 +85,12 @@ const MainBar = ({ accounts, setAccounts }) => {
                     onChange={(e) => setMessage(e.target.value)}
                     value={message}
                 />
-{/* 
                 <textarea
                      placeholder="Write Your Anonymous Message.." 
                      className="form--input2"
                     >
 
-                </textarea> */}
+                </textarea>
 
                 <button 
                     className="form--button"
@@ -98,7 +99,9 @@ const MainBar = ({ accounts, setAccounts }) => {
                     Post Anonymously
                 </button>
             </form >
-        </main>
+        </div>
+        </div>
+
     )
 }
 export default MainBar;
