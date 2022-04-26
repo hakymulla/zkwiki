@@ -105,7 +105,7 @@ async function verify(proof, publicSignals, circuitType) {
     return res;
   }
 
-module.exports = function formatMessage(str) { // ethers.utils.toUtf8Bytes(str)
+  function formatMessage(str) { // ethers.utils.toUtf8Bytes(str)
     return BigInt(ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE;
 }
 

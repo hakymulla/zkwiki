@@ -1,15 +1,13 @@
-import { useState } from 'react';
-// import { ethers, BigNumber } from 'ethers';
-import { ethers } from "ethers";
+import { React, useState } from 'react';
+import { ethers, BigNumber } from 'ethers';
 import Message from '../artifacts/contracts/Message.sol/Message.json';
-// import React from "react"
 
 let contractAddress = "0x9A676e781A523b5d0C0e43731313A708CB607508";
 
 const MainBar = ({ accounts, setAccounts }) => {
     const isConnected = Boolean(accounts[0]);
     const [message, setMessage] = useState("");
-
+    
     async function handleUser() {
         if (!window.ethereum) {
             alert("Please install MetaMask!");
@@ -52,8 +50,8 @@ const MainBar = ({ accounts, setAccounts }) => {
     }
 
     async function  saveMessage() {
-        if (!message) return;
-
+        // if (!message) return;
+        console.log("test");
         if (window.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
@@ -63,10 +61,10 @@ const MainBar = ({ accounts, setAccounts }) => {
                 signer
             );
             try {
-                const response = await contract.saveStrings(message);
-                console.log("Response:", response);
+                // const response = await contract.saveStrings(message);
+                console.log("Response:");
                 setMessage("");
-                await response.wait();
+                // await response.wait();
 
             }catch (err) {
                 console.log("ERROR:", err.message)
@@ -77,8 +75,6 @@ const MainBar = ({ accounts, setAccounts }) => {
     return (
         <main className="main">
 
-            <button onClick={handleUser}> Users</button>
-            <button onClick={createUser}> createUsers</button>
             <form className="form" >             
                 <input 
                     type="text"
@@ -87,13 +83,13 @@ const MainBar = ({ accounts, setAccounts }) => {
                     onChange={(e) => setMessage(e.target.value)}
                     value={message}
                 />
-
+{/* 
                 <textarea
                      placeholder="Write Your Anonymous Message.." 
                      className="form--input2"
                     >
 
-                </textarea>
+                </textarea> */}
 
                 <button 
                     className="form--button"
@@ -101,7 +97,7 @@ const MainBar = ({ accounts, setAccounts }) => {
                 >
                     Post Anonymously
                 </button>
-            </form>
+            </form >
         </main>
     )
 }

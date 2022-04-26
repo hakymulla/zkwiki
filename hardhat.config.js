@@ -29,6 +29,14 @@ module.exports = {
       url: process.env.REACT_APP_RINKEBY_RPC_URL,
       accounts:[process.env.REACT_APP_PRIVATE_KEY],
     },
+    testnet: {
+      url: `https://api.s0.b.hmny.io`,
+      accounts: [`0x${process.env.HARMONY_PRIVATE_KEY}`],
+    },
+    mainnet: {
+      url: `https://api.harmony.one`,
+      accounts: [`0x${process.env.HARMONY_PRIVATE_KEY}`]
+    }
   },
   etherscan: {
     apiKey: process.env.REACT_APP_ETHERSCAN_KEY,

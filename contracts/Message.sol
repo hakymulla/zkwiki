@@ -9,9 +9,6 @@ contract Message {
 
     SendVerifier sendVerifier;
     RevealVerifier revealVerifier;
-    
-    uint256[] public users;
-    mapping(uint256 => bool) userExists;
 
     struct MessageStruct {
         bool isrevealed;
@@ -20,21 +17,12 @@ contract Message {
     
     MessageStruct[] public messages;
 
+    event Send(uint256 indexed hash, bool revealed);
+    event Revealed(uint256 indexed hash, bool revealed);
+
     constructor(address _sendVerifier, address _revealVerifier) {
         sendVerifier = SendVerifier(_sendVerifier);
         revealVerifier = RevealVerifier(_revealVerifier);
-    }
-
-    function createUser() public {
-        uint256 userhash = uint256(keccak256(abi.encodePacked(msg.sender)));
-        require(userExists[userhash] == false, "User already exists");
-        userExists[userhash]  = true;
-        users.push(userhash);
-    }
-
-    function userExist() public view returns (bool){
-        uint256 userhash = uint256(keccak256(abi.encodePacked(msg.sender)));
-        return userExists[userhash];
     }
 
     function sendMessage(
@@ -48,6 +36,7 @@ contract Message {
         MessageStruct memory message;
         message.msghash = _input[0];
         messages.push(message);
+        emit Send(message.msghash, message.isrevealed);
     }
 
     function revealMessage(
@@ -61,6 +50,7 @@ contract Message {
             if (messages[i].msghash == _input[1]) {
                 MessageStruct storage message = messages[i];
                 message.isrevealed = true;
+                emit Send(message.msghash, message.isrevealed);
                 break;
             }
         }

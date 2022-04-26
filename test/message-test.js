@@ -14,7 +14,7 @@ const revealzkey = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/p
 const revealWasm = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/revealmessage/circuit.wasm';
 const revealvkey= '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/revealmessage/verification_key.json';
 
-function formatMessage(str) { // ethers.utils.toUtf8Bytes(str)
+function formatMessage(str) { 
     return BigInt(ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE;
 }
 
@@ -92,11 +92,23 @@ describe("Message", function () {
     expect(await message.messages[0]).to.equal(undefined);
 
     const result = await message.sendMessage(_a, _b, _c, _input);
-    console.log(_input[0]);
     var output = await message.messages(0);
-    console.log(output);
+    expect(output.isrevealed).to.equal(false);
+  });
 
-    console.log("REVEAL   : ")
+  it("Reveal Message Hash from the contract", async function () {
+    const secret = BigInt(1);
+    const salt = BigInt(2);
+    const msg = JSON.stringify({msgheader: "the title",});
+    const input = {secret,salt,msgheader: formatMessage(msg),};
+
+    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+    const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+    
+    expect(await message.messages[0]).to.equal(undefined);
+
+    const result = await message.sendMessage(_a, _b, _c, _input);
+
     const vKey = JSON.parse(readFileSync(sendvkey));
     const msgHash = send.publicSignals[0];
 
@@ -109,12 +121,10 @@ describe("Message", function () {
 
     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
     const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
-    // console.log(reveal_calldata._a, reveal_calldata._input)
-    console.log(reveal_calldata);
     const reveal_result = await message.revealMessage(reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
     var output = await message.messages(0);
-    console.log(output);
-
+    expect(output.isrevealed).to.equal(true);
 
   });
+
 });
