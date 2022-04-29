@@ -12,7 +12,7 @@ const { assert } = require('console');
 // const { stringifyBigInts, prove, verify, formatMessage, getCallData } = require('/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/ts/utils');
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
 
-
+console.log("groth16", groth16);
 
 const sendzkey = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/circuit_final.zkey'
 const sendWasm = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/circuit.wasm';

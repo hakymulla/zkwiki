@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-etherscan");
+require("@nomiclabs/hardhat-ethers");
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -44,5 +45,4 @@ module.exports = {
   paths:{
     artifacts: "./src/artifacts"
   },
-  "test": "node --require esm node_modules/.bin/hardhat test"
 };
