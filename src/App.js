@@ -20,7 +20,6 @@ useEffect(() => {
 
   return (
     <div className="App">
-      <p>Test</p>
       <Navbar accounts={accounts} setAccounts={setAccounts} />
       <MainBar accounts={accounts} setAccounts={setAccounts} />
       <div className='vl'></div>
