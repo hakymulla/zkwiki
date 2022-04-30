@@ -132,10 +132,16 @@ const MainBar = ({ accounts, setAccounts }) => {
                 const salt_stringify = JSON.stringify({salt: salt});
                 const msg_stringify = JSON.stringify({msgheader: msgHeader});
         
+                // const input = {
+                //     secret: Number(formatMessage(secret_stringify)),
+                //     salt: Number(formatMessage(salt_stringify)),
+                //     msgheader: Number(formatMessage(msg_stringify)),
+                // };
+
                 const input = {
-                    secret: Number(formatMessage(secret_stringify)),
-                    salt: Number(formatMessage(salt_stringify)),
-                    msgheader: Number(formatMessage(msg_stringify)),
+                    secret,
+                    salt,
+                    msgheader:msgHeader,
                 };
                 console.log("input", input);
 
