@@ -131,8 +131,7 @@ const MainBar = ({ accounts, setAccounts }) => {
                 const secret_stringify = JSON.stringify({secret: secret});
                 const salt_stringify = JSON.stringify({salt: salt});
                 const msg_stringify = JSON.stringify({msgheader: msgHeader});
-            
-
+        
                 const input = {
                     secret: Number(formatMessage(secret_stringify)),
                     salt: Number(formatMessage(salt_stringify)),
@@ -141,7 +140,9 @@ const MainBar = ({ accounts, setAccounts }) => {
                 console.log("input", input);
 
                 const send = await groth16.fullProve(input, sendWasm, sendzkey);
+                console.log("send", send);
                 const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+                console.log("_inout", _input);
                 const msgHash = send.publicSignals[0]
                 console.log(msgHash)
                 const response = await contract.sendMessage(msgHeader,_a,_b,_c,_input);
