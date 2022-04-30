@@ -134,9 +134,9 @@ const MainBar = ({ accounts, setAccounts }) => {
             
 
                 const input = {
-                    secret: formatMessage(secret_stringify),
-                    salt: formatMessage(salt_stringify),
-                    msgheader: formatMessage(msg_stringify),
+                    secret: Number(formatMessage(secret_stringify)),
+                    salt: Number(formatMessage(salt_stringify)),
+                    msgheader: Number(formatMessage(msg_stringify)),
                 };
                 console.log("input", input);
 

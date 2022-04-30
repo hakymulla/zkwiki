@@ -66,23 +66,14 @@ export default function Reveal({ accounts, setAccounts }) {
                 const secret_stringify = JSON.stringify({secret: secretReveal});
                 const salt_stringify = JSON.stringify({salt: saltReveal});
                 const msg_stringify = JSON.stringify({msgheader: msgHeaderReveal});
-                console.log("msgheaader", msg_stringify);
 
                 
                 const reveal_input = {
-                    secret:formatMessage(secret_stringify).value,
-                    salt: formatMessage(salt_stringify).value,
-                    msgheader: formatMessage(msg_stringify).value,
+                    secret:Number(formatMessage(secret_stringify).value),
+                    salt: Number(formatMessage(salt_stringify).value),
+                    msgheader: Number(formatMessage(msg_stringify).value),
                     msgHash
                 };
-
-
-                // const reveal_input2 =  {
-                //     secret: 1n,
-                //     salt: 2n,
-                //     msgheader: 13341044457109254294203852456720387116212463375612399478786715689898471863352n,
-                //     msgHash: '16482258256106470148964370005993332270345612836339283261333717405943502937790'
-                //   }
 
                 console.log("reveal", reveal_input);
 
