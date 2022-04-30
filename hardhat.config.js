@@ -43,6 +43,6 @@ module.exports = {
     apiKey: process.env.REACT_APP_ETHERSCAN_KEY,
   },
   paths:{
-    artifacts: "./src/artifacts"
+    artifacts: "./src/components/artifacts"
   },
 };
