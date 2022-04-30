@@ -5,7 +5,7 @@ const { groth16 } = require('snarkjs');
 const {useState, useEffect} = require('react');
 const { ethers, BigNumber } = require('ethers');
 const contractAddress = "0xD1760AA0FCD9e64bA4ea43399Ad789CFd63C7809";
-const Message  = require('components/artifacts/contracts/Message.sol/Message.json');
+const Message  = require('../public/artifacts/contracts/Message.sol/Message.json');
 const { formatMessage, getCallData } = require('../utils');
 
 
