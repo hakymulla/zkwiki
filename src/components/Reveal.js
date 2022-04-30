@@ -1,44 +1,26 @@
+import { callbackify } from 'util';
 
 const React = require('react');
+const { groth16 } = require('snarkjs');
 const {useState, useEffect} = require('react');
 const { ethers, BigNumber } = require('ethers');
 const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
 const Message  = require('../artifacts/contracts/Message.sol/Message.json');
-const { keccak, formatMessage } = require('../utils');
+const { formatMessage, getCallData } = require('../utils');
 
-const msgHash = "7131043295314598378192828864958545486842576555452800947213369630202796374561"
-const reveal_calldata_a = [
-  '0x2ba5a7b48fcd504b945e243d86a648098e36be803a6de93cf517afb09bd339c9',
-  '0x0f4a06ab91a705b673cfce39e2d1bb6f713db4dac05ac9ca40d4cd8dd9bc223d'
-]
-const reveal_calldata_b =[
-  [
-    '0x010fdcae3d202c0797d641180e5455a182ceb712cd4ac9de837c0165097860df',
-    '0x0fd92ed4944c3a60f8ecfd2f0b1985015d0587e35ffd999e945991f1b469346b'
-  ],
-  [
-    '0x0465f014d2ebe115f57a9df97f82939d7d081293f53c0250341fa9ddcada3da4',
-    '0x10e55baffeaa23d4b9b796ec7293c210e57f2d627061a8fdd242eeff28a1707c'
-  ]
-]
-const reveal_calldata_c = [
-  '0x0492c785da302176be71455b6aaac9f5e522362d0c738050f874f2ed1d25137b',
-  '0x18ffe9d00271af7050580e80cb8b42187f2a09a54f701e3340fe8681062a6f70'
-]
-const reveal_calldata_input =[
-  '0x15307bb4774cfd2f305394fb0686e79d9b630211f6a1bf49e581d32f83a3956a',
-  '0x0fc40708849b20b3db5b985e2c7d920e8252e039d09a189f086300405802fa21'
-]
 
-const msgbody = "This file of tXYZ can be found on blablabla.com";
+
+const revealzkey = 'revealmessage/circuit_final.zkey'
+const revealWasm = 'revealmessage/circuit.wasm';
+const revealvkey= 'revealmessage/verification_key.json';
 
 export default function Reveal({ accounts, setAccounts }) {
 
     const [alldata, setalldata] = useState("");
-    const [msgHeader, setMsgHeader] = useState("");
+    const [msgHeaderReveal, setMsgHeaderReveal] = useState("");
     const [msgHash, setMsgHash] = useState("");
-    const [secret, setSecret] = useState("");
-    const [salt, setSalt] = useState("");
+    const [secretReveal, setSecretReveal] = useState("");
+    const [saltReveal, setSaltReveal] = useState("");
     const INTERVAL_DELAY = 6000;
 
 
@@ -81,17 +63,35 @@ export default function Reveal({ accounts, setAccounts }) {
                 signer
             );
             try {
+                const secret_stringify = JSON.stringify({secret: secretReveal});
+                const salt_stringify = JSON.stringify({salt: saltReveal});
+                const msg_stringify = JSON.stringify({msgheader: msgHeaderReveal});
+                console.log("msgheaader", msg_stringify);
+
+                
                 const reveal_input = {
-                    secret:keccak(secret),
-                    salt: keccak(salt),
-                    msgheader:keccak(msgHeader),
+                    secret:formatMessage(secret_stringify).value,
+                    salt: formatMessage(salt_stringify).value,
+                    msgheader: formatMessage(msg_stringify).value,
                     msgHash
-                }
-                console.log(reveal_input);
-                // const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
-                // const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
+                };
+
+
+                // const reveal_input2 =  {
+                //     secret: 1n,
+                //     salt: 2n,
+                //     msgheader: 13341044457109254294203852456720387116212463375612399478786715689898471863352n,
+                //     msgHash: '16482258256106470148964370005993332270345612836339283261333717405943502937790'
+                //   }
+
+                console.log("reveal", reveal_input);
+
+                const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
+                console.log("reveal snark:", reveal);
+                const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
+                console.log(reveal_calldata);
                 const msgbody = localStorage.getItem('msgBody');
-                const reveal_result = await contract.revealMessage(msgbody, reveal_calldata_a, reveal_calldata_b, reveal_calldata_c, reveal_calldata_input);
+                const reveal_result = await contract.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
 
             }catch (err) {
                 console.log("error:", err)
@@ -101,7 +101,7 @@ export default function Reveal({ accounts, setAccounts }) {
     const display = async() => {}
 
     const handleMsgHeader = (e) => {
-        setMsgHeader(e.target.value);
+        setMsgHeaderReveal(e.target.value);
     }
 
     const handleMsgHash = (e) => {
@@ -110,11 +110,11 @@ export default function Reveal({ accounts, setAccounts }) {
 
 
     const handleSecret = (e) => {
-        setSecret(e.target.value);
+        setSecretReveal(e.target.value);
     }
 
     const handleSalt = (e) => {
-        setSalt(e.target.value);
+        setSaltReveal(e.target.value);
     }
 
     useEffect(() => {
@@ -164,7 +164,7 @@ export default function Reveal({ accounts, setAccounts }) {
                     placeholder="Message Header"
                     className="form--input"
                     onChange={handleMsgHeader}
-                    value={msgHeader}
+                    value={msgHeaderReveal}
                 />
 
                 <input 
@@ -180,14 +180,14 @@ export default function Reveal({ accounts, setAccounts }) {
                     placeholder="Secret"
                     className="form--input"
                     onChange={handleSecret}
-                    value={secret}
+                    value={secretReveal}
                 />
                 <input 
                     type="text"
                     placeholder="Salt"
                     className="form--input"
                     onChange={handleSalt}
-                    value={salt}
+                    value={saltReveal}
                 />
                
 

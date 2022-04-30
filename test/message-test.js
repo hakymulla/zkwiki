@@ -75,62 +75,65 @@ describe("Message", function () {
         console.log("Message deployed to:", message.address);
     });
 
-//   it("Send Message Hash to the contract", async function () {
-//     const secret = BigInt(1);
-//     const salt = BigInt(2);
-//     const msgheader = "the title";
-//     const msgbody = "This is the body";
-//     const msg = JSON.stringify({msgheader: msgheader});
-//     const input = {secret,salt,msgheader: formatMessage(msg),};
+  it("Send Message Hash to the contract", async function () {
+    const secret = BigInt(1);
+    const salt = BigInt(2);
+    const msgheader = "the title";
+    const msgbody = "This is the body";
+    const msg = JSON.stringify({msgheader: msgheader});
+    const input = {secret,salt,msgheader: formatMessage(msg),};
+    console.log("input", input);
+    console.log(typeof(input));
 
-//     const send = await groth16.fullProve(input, sendWasm, sendzkey);
-//     const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+    const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
     
-//     expect(await message.messages[0]).to.equal(undefined);
+    expect(await message.messages[0]).to.equal(undefined);
 
-//     const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
-//     var output = await message.messages(0);
-//     expect(output.isrevealed).to.equal(false);
+    const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
+    var output = await message.messages(0);
+    expect(output.isrevealed).to.equal(false);
 
-//     const msgcount = await message.msgCount();
-//     expect(msgcount.toString()).to.equal("1");
-//   });
+    const msgcount = await message.msgCount();
+    expect(msgcount.toString()).to.equal("1");
+  });
 
 
 
-//    it("Reveal Message Hash from the contract", async function () {
-//     const secret = BigInt(1);
-//     const salt = BigInt(2);
-//     const msgheader = "the title";
-//     const msgbody = "This is the body"; // this is stored off chain and retrived while revealing
-//     const msg = JSON.stringify({msgheader: msgheader});
-//     const input = {secret,salt,msgheader: formatMessage(msg),};
+   it("Reveal Message Hash from the contract", async function () {
+    const secret = BigInt(1);
+    const salt = BigInt(2);
+    const msgheader = "the titlemessage header";
+    const msgbody = "This is the body"; // this is stored off chain and retrived while revealing
+    const msg = JSON.stringify({msgheader: msgheader});
+    const input = {secret,salt,msgheader: formatMessage(msg),};
 
-//     const send = await groth16.fullProve(input, sendWasm, sendzkey);
-//     const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+    const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
     
-//     expect(await message.messages[0]).to.equal(undefined);
+    expect(await message.messages[0]).to.equal(undefined);
     
-//     const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
-//     var output = await message.messages(0);
+    const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
+    var output = await message.messages(0);
 
-//     const vKey = JSON.parse(readFileSync(sendvkey));
-//     const msgHash = send.publicSignals[0];
+    const vKey = JSON.parse(readFileSync(sendvkey));
+    const msgHash = send.publicSignals[0];
 
-//     const reveal_input = {
-//         secret,
-//         salt,
-//         msgheader: formatMessage(msg),   
-//         msgHash
-//     };
+    const reveal_input = {
+        secret,
+        salt,
+        msgheader: formatMessage(msg),   
+        msgHash
+    };
+    console.log("reveal_input", reveal_input);
 
-//     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
-//     const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
-//     const reveal_result = await message.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
-//     var output = await message.messages(0);
-//     expect(output.isrevealed).to.equal(true);
+    const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
+    const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
+    const reveal_result = await message.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
+    var output = await message.messages(0);
+    expect(output.isrevealed).to.equal(true);
 
-//   });
+  });
 
 //   it("Send Multiple Messages and Reveal Message Hash from the contract", async function () {
 //     const secret = BigInt(1);
@@ -201,50 +204,48 @@ describe("Message", function () {
 //   });
 
 
-it("Just for test", async function () {
-    const secret = formatMessage("secret");
-    const salt = formatMessage("salt");
-    const msgheader = "the title";
-    const msgbody = "This is the body";
-    const msg = JSON.stringify({msgheader: msgheader});
-    const input = {secret,salt,msgheader: formatMessage(msg),};
+// it("Just for test", async function () {
+//     const secret = formatMessage("secret");
+//     const salt = formatMessage("salt");
+//     const msgheader = "the title";
+//     const msgbody = "This is the body";
+//     const msg = JSON.stringify({msgheader: msgheader});
+//     const input = {secret,salt,msgheader: formatMessage(msg),};
 
-    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+//     const send = await groth16.fullProve(input, sendWasm, sendzkey);
     
-    const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
-    console.log("a", _a);
-    console.log("b", _b);
-    console.log("c", _c);
-    console.log("input", _input);
+//     const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+//     console.log("a", _a);
+//     console.log("b", _b);
+//     console.log("c", _c);
+//     console.log("input", _input);
 
+//     expect(await message.messages[0]).to.equal(undefined);
 
-    
-    expect(await message.messages[0]).to.equal(undefined);
+//     const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
+//     var output = await message.messages(0);
+//     expect(output.isrevealed).to.equal(false);
 
-    const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
-    var output = await message.messages(0);
-    expect(output.isrevealed).to.equal(false);
+//     const msgHash = send.publicSignals[0];
+//     const reveal_input = {
+//         secret,
+//         salt,
+//         msgheader: formatMessage(msg),   
+//         msgHash
+//     };
 
-    const msgHash = send.publicSignals[0];
-    const reveal_input = {
-        secret,
-        salt,
-        msgheader: formatMessage(msg),   
-        msgHash
-    };
+//     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
+//     const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
+//     const reveal_result = await message.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
+//     console.log("msgHash", msgHash)
+//     console.log("reveal_calldata._a",reveal_calldata._a, )
+//     console.log("reveal_calldata._b", reveal_calldata._b)
+//     console.log("reveal_calldata._c", reveal_calldata._c)
+//     console.log("reveal_calldata._input", reveal_calldata._input)
 
-    const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
-    const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
-    const reveal_result = await message.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
-    console.log("msgHash", msgHash)
-    console.log("reveal_calldata._a",reveal_calldata._a, )
-    console.log("reveal_calldata._b", reveal_calldata._b)
-    console.log("reveal_calldata._c", reveal_calldata._c)
-    console.log("reveal_calldata._input", reveal_calldata._input)
+//     var output = await message.messages(0);
+//     expect(output.isrevealed).to.equal(true);
 
-    var output = await message.messages(0);
-    expect(output.isrevealed).to.equal(true);
-
-  });
+//   });
 
 });

@@ -1,14 +1,16 @@
+import { React, useState } from 'react';
+import { ethers, BigNumber } from 'ethers';
+import BigInt from 'big-integer';
+
 // import CryptoES from 'crypto-es';
 // const Buffer = require('buffer').Buffer;
 // const { expect } = require("chai");
 // const { ethers } = require("hardhat");
-// const { groth16 } = require('snarkjs');
+const { groth16 } = require('snarkjs');
 // const { keccak256 } = require('ethers/lib/utils');
-import { React, useState } from 'react';
-import { ethers, BigNumber } from 'ethers';
 
 
-import BigInt from 'big-integer';
+
 // const hre = require("hardhat");
 
 
@@ -47,24 +49,24 @@ const SNARK_FIELD_SIZE = BigInt(218882428718392752222464057452572750885483644004
 //     }
 // }
 
-// function unstringifyBigInts(o) {
-//     if ((typeof(o) == "string") && (/^[0-9]+$/.test(o) ))  {
-//         return BigInt(o);
-//     } else if ((typeof(o) == "string") && (/^0x[0-9a-fA-F]+$/.test(o) ))  {
-//         return BigInt(o);
-//     } else if (Array.isArray(o)) {
-//         return o.map(unstringifyBigInts);
-//     } else if (typeof o == "object") {
-//         const res = {};
-//         const keys = Object.keys(o);
-//         keys.forEach( (k) => {
-//             res[k] = unstringifyBigInts(o[k]);
-//         });
-//         return res;
-//     } else {
-//         return o;
-//     }
-// }
+function unstringifyBigInts(o) {
+    if ((typeof(o) == "string") && (/^[0-9]+$/.test(o) ))  {
+        return BigInt(o);
+    } else if ((typeof(o) == "string") && (/^0x[0-9a-fA-F]+$/.test(o) ))  {
+        return BigInt(o);
+    } else if (Array.isArray(o)) {
+        return o.map(unstringifyBigInts);
+    } else if (typeof o == "object") {
+        const res = {};
+        const keys = Object.keys(o);
+        keys.forEach( (k) => {
+            res[k] = unstringifyBigInts(o[k]);
+        });
+        return res;
+    } else {
+        return o;
+    }
+}
 
 // const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
 
@@ -107,34 +109,34 @@ function keccak(str) { // ethers.utils.toUtf8Bytes(str)
 }
 
 
-function formatMessage(str) { // ethers.utils.toUtf8Bytes(str)
-    return BigInt(ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE;
+function formatMessage(str) { 
+    return BigInt((ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE);
 }
 
 // function keccak(str:string):BigInt { // ethers.utils.toUtf8Bytes(str)
 //     return BigInt(ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE;
 // }
 
-// async function getCallData(proof, publicSignals){
-//     const editedProof = unstringifyBigInts(proof);
-//     const editedPublicSignals = unstringifyBigInts(publicSignals);
-//     const calldata = await snarkjs.groth16.exportSolidityCallData(
-//         editedProof,
-//         editedPublicSignals
-//       );
-//     //console.log(calldata);
-//     const calldataSplit = calldata.split(",");
-//     let _a = eval(calldataSplit.slice(0, 2).join());
-//     let _b = eval(calldataSplit.slice(2, 6).join());
-//     let _c = eval(calldataSplit.slice(6, 8).join());
-//     let _input = eval(calldataSplit.slice(8).join());
-//     return {
-//         _a,
-//         _b,
-//         _c,
-//         _input
-//     };
-// }
+async function getCallData(proof, publicSignals){
+    const editedProof = unstringifyBigInts(proof);
+    const editedPublicSignals = unstringifyBigInts(publicSignals);
+    const calldata = await groth16.exportSolidityCallData(
+        editedProof,
+        editedPublicSignals
+      );
+    //console.log(calldata);
+    const calldataSplit = calldata.split(",");
+    let _a = eval(calldataSplit.slice(0, 2).join());
+    let _b = eval(calldataSplit.slice(2, 6).join());
+    let _c = eval(calldataSplit.slice(6, 8).join());
+    let _input = eval(calldataSplit.slice(8).join());
+    return {
+        _a,
+        _b,
+        _c,
+        _input
+    };
+}
 
 
 
@@ -144,6 +146,6 @@ export {
     // prove,
     // verify,
     keccak,
-    // getCallData,
+    getCallData,
     formatMessage
 }
