@@ -15,7 +15,7 @@ const sendWasm = 'sendmessage/circuit.wasm';
 const sendvkey= 'sendmessage/verification_key.json';
 
 
-const contractAddress = "0xD1760AA0FCD9e64bA4ea43399Ad789CFd63C7809";
+const contractAddress = "0x474557bE5C15d848Df6557993F7eCC6919116dC9";
 // const messageABI = Message.abi
 // const provider = new ethers.providers.Web3Provider(window.ethereum);
 // const signer = provider.getSigner();
