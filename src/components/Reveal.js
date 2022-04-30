@@ -1,5 +1,5 @@
 import { callbackify } from 'util';
-import {Message} from 'Message';
+import {Message} from 'Message.json';
 const React = require('react');
 const { groth16 } = require('snarkjs');
 const {useState, useEffect} = require('react');

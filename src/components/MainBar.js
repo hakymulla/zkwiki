@@ -1,5 +1,5 @@
 // import { groth16 } from "snarkjs";
-import {Message} from 'Message';
+import {Message} from 'Message.json';
 const { groth16 } = require('snarkjs');
 const { React, useState } = require('react');
 const { ethers, BigNumber } = require('ethers');
