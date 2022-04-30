@@ -132,17 +132,12 @@ const MainBar = ({ accounts, setAccounts }) => {
                 const salt_stringify = JSON.stringify({salt: salt});
                 const msg_stringify = JSON.stringify({msgheader: msgHeader});
         
-                // const input = {
-                //     secret: Number(formatMessage(secret_stringify)),
-                //     salt: Number(formatMessage(salt_stringify)),
-                //     msgheader: Number(formatMessage(msg_stringify)),
-                // };
-
                 const input = {
-                    secret,
-                    salt,
-                    msgheader:msgHeader,
+                    secret: Number(formatMessage(secret_stringify)),
+                    salt: Number(formatMessage(salt_stringify)),
+                    msgheader: Number(formatMessage(msg_stringify)),
                 };
+                
                 console.log("input", input);
 
                 const send = await groth16.fullProve(input, sendWasm, sendzkey);
