@@ -1,10 +1,11 @@
 // import { groth16 } from "snarkjs";
+import {Message} from 'Message';
 const { groth16 } = require('snarkjs');
 const { React, useState } = require('react');
 const { ethers, BigNumber } = require('ethers');
 const { keccak, getCallData } = require('../utils');
 const BigInt = require('big-integer');
-const Message  = require('Message.json');
+// const Message  = require('Message.json');
 // const { readFileSync, writeFile } = require("fs");
 // const { groth16 } = require('snarkjs');
 const { expect } = require("chai");
