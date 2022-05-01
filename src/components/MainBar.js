@@ -13,8 +13,8 @@ const revealzkey = 'revealmessage/circuit_final.zkey'
 const revealWasm = 'revealmessage/circuit.wasm';
 const revealvkey= 'revealmessage/verification_key.json';
 
-// const contractAddress = "0x474557bE5C15d848Df6557993F7eCC6919116dC9";
-const contractAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+const contractAddress = "0x474557bE5C15d848Df6557993F7eCC6919116dC9";
+// const contractAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
 
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
 
