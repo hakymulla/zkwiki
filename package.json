@@ -24,7 +24,6 @@
     "esm": "^3.2.25",
     "framer-motion": "^6.3.0",
     "fs": "^0.0.1-security",
-    "ipfs-core": "^0.14.3",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "react": "^18.1.0",
