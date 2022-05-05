@@ -79,14 +79,12 @@ async function getCallData(proof, publicSignals){
 describe("SendMessage", function () {
   it("SendMessage and Reveal Message Circuit", async function () {
     const secret = BigInt(2);
-    const salt = BigInt(2);
     const msg = JSON.stringify({
         msgheader: "the title",
     });
 
     const input = {
         secret,
-        salt,
         msgheader: formatMessage(msg),   
     };
 
@@ -116,7 +114,6 @@ describe("SendMessage", function () {
     // Reveal Message
     const reveal_input = {
         secret,
-        salt,
         msgheader: formatMessage(msg),   
         msgHash
     };

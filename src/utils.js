@@ -1,26 +1,7 @@
-import { React, useState } from 'react';
-import { ethers, BigNumber } from 'ethers';
+import { ethers} from 'ethers';
 import BigInt from 'big-integer';
-
-// import CryptoES from 'crypto-es';
-// const Buffer = require('buffer').Buffer;
-// const { expect } = require("chai");
-// const { ethers } = require("hardhat");
 const { groth16 } = require('snarkjs');
 // const { keccak256 } = require('ethers/lib/utils');
-
-
-
-// const hre = require("hardhat");
-
-
-// const { groth16 } = require('snarkjs');
-
-// import  { groth16 } from 'snarkjs';
-
-
-// import fs from "fs";
-
 
 // circom files
 const sendzkey = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/circuit_final.zkey'
@@ -32,22 +13,22 @@ const sendvkey= '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/publ
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
 
 
-// function stringifyBigInts(o) {
-//     if ((typeof(o) == "bigint") || o.eq !== undefined)  {
-//         return o.toString(10);
-//     } else if (Array.isArray(o)) {
-//         return o.map(stringifyBigInts);
-//     } else if (typeof o == "object") {
-//         const res = {};
-//         const keys = Object.keys(o);
-//         keys.forEach( (k) => {
-//             res[k] = stringifyBigInts(o[k]);
-//         });
-//         return res;
-//     } else {
-//         return o;
-//     }
-// }
+function stringifyBigInts(o) {
+    if ((typeof(o) == "bigint") || o.eq !== undefined)  {
+        return o.toString(10);
+    } else if (Array.isArray(o)) {
+        return o.map(stringifyBigInts);
+    } else if (typeof o == "object") {
+        const res = {};
+        const keys = Object.keys(o);
+        keys.forEach( (k) => {
+            res[k] = stringifyBigInts(o[k]);
+        });
+        return res;
+    } else {
+        return o;
+    }
+}
 
 function unstringifyBigInts(o) {
     if ((typeof(o) == "string") && (/^[0-9]+$/.test(o) ))  {
@@ -113,10 +94,6 @@ function formatMessage(str) {
     return BigInt((ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE);
 }
 
-// function keccak(str:string):BigInt { // ethers.utils.toUtf8Bytes(str)
-//     return BigInt(ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE;
-// }
-
 async function getCallData(proof, publicSignals){
     const editedProof = unstringifyBigInts(proof);
     const editedPublicSignals = unstringifyBigInts(publicSignals);
@@ -124,7 +101,6 @@ async function getCallData(proof, publicSignals){
         editedProof,
         editedPublicSignals
       );
-    //console.log(calldata);
     const calldataSplit = calldata.split(",");
     let _a = eval(calldataSplit.slice(0, 2).join());
     let _b = eval(calldataSplit.slice(2, 6).join());

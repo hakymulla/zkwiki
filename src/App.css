@@ -9,7 +9,6 @@
   height: 65px;
   justify-content: space-between;
   background: linear-gradient(90deg, #525252 1.18%, #a6a6a6 100%);
-
   color: white;
   padding: 20px;
 }
@@ -71,7 +70,7 @@ div.reveal {
 }
 
 .form {
-  height: 340px;
+  height: 380px;
   display: grid;
   grid-template: 40px 40px ;
   gap: 17px;
@@ -89,14 +88,17 @@ div.reveal {
   height: 10px;
   text-indent: 5px;
   padding: 5px 5px;
-  
 }
 
 .form--reveal {
+  margin-top: 10px;
+  height: 140px;
   display: grid;
   grid-template: 40px 40px ;
   gap: 17px;
   padding: 40px 40px;
+  border: 1px solid lightgray; 
+  border-radius: 10px 10px; 
   box-shadow: 5px 5px 5px 1px rgba(120,120,120,0.44);
   -webkit-box-shadow: 5px 5px 5px 1px rgba(120,120,120,0.44);
   -moz-box-shadow: 5px 5px 5px 1px rgba(120,120,120,0.44);

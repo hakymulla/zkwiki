@@ -1,19 +1,15 @@
-import { callbackify } from 'util';
 const React = require('react');
 const { groth16 } = require('snarkjs');
 const {useState, useEffect} = require('react');
-const { ethers, BigNumber } = require('ethers');
-const contractAddress = "0x474557bE5C15d848Df6557993F7eCC6919116dC9";
-// const contractAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+const { ethers } = require('ethers');
+const contractAddress = "0xdf3c7B18d0CaCC49743FC6F2a2237AF297341736";
+// const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
 
 const Message  = require('./Message.json');
-const { formatMessage, getCallData } = require('../utils');
-
-
-
-const revealzkey = 'revealmessage/circuit_final.zkey'
 const revealWasm = 'revealmessage/circuit.wasm';
 const revealvkey= 'revealmessage/verification_key.json';
+
+
 
 export default function Reveal({ accounts, setAccounts }) {
 
@@ -22,7 +18,6 @@ export default function Reveal({ accounts, setAccounts }) {
 
 
     const getMessageStructData = async() => {
-        // e.preventDefault();
         if (!window.ethereum) {
             alert("Please install MetaMask!");
             return;
@@ -36,7 +31,6 @@ export default function Reveal({ accounts, setAccounts }) {
             );
             try {
                 const response =  await contract.getMessageStruct();
-                console.log(response);
                 setalldata(response);
 
             }catch (err) {

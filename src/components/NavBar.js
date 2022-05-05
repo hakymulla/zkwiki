@@ -4,8 +4,6 @@ const useState = require('react');
 
 const NavBar = ({ accounts, setAccounts }) => {
     const isConnected = Boolean(accounts[0]);
-    // const [defaultAccount, setDefaultAccount] = useState(null);
-
     async function connectAccount(){
         if (window.ethereum){
             const accounts = await window.ethereum.request({
@@ -21,10 +19,12 @@ const NavBar = ({ accounts, setAccounts }) => {
 
             <div className='header--title'> zkWiki </div>
             
-            {/* <div className='header--address'> 
-                { isConnected ? <p>Address:{accounts[0].slice(0,5)}...{accounts[0].slice(-4,)}  </p> : <p>None</p>} 
+            <div className='header--address'> 
+                
+                { isConnected ? <p>{accounts[0].slice(0,5)}...{accounts[0].slice(-4,)}  </p> 
+                : <p>{undefined}</p>} 
             
-            </div> */}
+            </div>
 
             {isConnected ? (
             <p> Connected</p>) : (
