@@ -4,7 +4,6 @@ const { ethers } = require('ethers');
 const { keccak, getCallData } = require('../utils');
 const BigInt = require('big-integer');
 const Message  = require('./Message.json');
-const IPFS = require('ipfs-core')
 
 const sendzkey = 'sendmessage/circuit_final.zkey'
 const sendWasm = 'sendmessage/circuit.wasm';
