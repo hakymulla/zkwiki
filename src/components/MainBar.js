@@ -62,16 +62,10 @@ const MainBar = ({ accounts, setAccounts }) => {
                 };
                 
                 const send = await groth16.fullProve(input, sendWasm, sendzkey);
-                console.log("send", send);
                 const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
-                console.log("_input", _input);
                 const msgHash = send.publicSignals[0]
                 const response = await contract.sendMessage(msgHeader,_a,_b,_c,_input);
-                console.log("response", response);
                 localStorage.setItem(msgHeader, msgBody);
-                // alert("Copy This Message Hash, You'll need it to Reveal Your Message");
-                // alert(msgHash);
-
 
             } catch (err) {
                 console.log("ERROR:", err.message)
@@ -109,11 +103,8 @@ const MainBar = ({ accounts, setAccounts }) => {
                     msgHash: send.publicSignals[0]
                 };
                 const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
-                console.log("reveal snark:", reveal);
                 const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
-                console.log(reveal_calldata);
                 const msgbody = localStorage.getItem(msgHeaderReveal);
-                console.log(msgbody)
                 const reveal_result = await contract.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
 
             }catch (err) {

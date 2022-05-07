@@ -5,19 +5,12 @@ const { groth16 } = require('snarkjs');
 const { readFileSync, writeFile } = require("fs");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-// const { generateWitness } = require('/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/generate_witness')
-
-// const wc  = require("/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/witness_calculator.js");
 const { assert } = require('console');
-// const { stringifyBigInts, prove, verify, formatMessage, getCallData } = require('/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/ts/utils');
+
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
-
-console.log("groth16", groth16);
-
 const sendzkey = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/circuit_final.zkey'
 const sendWasm = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/circuit.wasm';
 const sendvkey= '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/sendmessage/verification_key.json';
-
 const revealzkey = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/revealmessage/circuit_final.zkey'
 const revealWasm = '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/revealmessage/circuit.wasm';
 const revealvkey= '/Users/Hakeem/Documents/zkpassignment/FinalProject/zk-wiki/public/revealmessage/verification_key.json';
@@ -62,7 +55,6 @@ async function getCallData(proof, publicSignals){
         editedProof,
         editedPublicSignals
       );
-    //console.log(calldata);
     const calldataSplit = calldata.split(",");
     let _a = eval(calldataSplit.slice(0, 2).join());
     let _b = eval(calldataSplit.slice(2, 6).join());
@@ -96,8 +88,6 @@ describe("SendMessage", function () {
     // });
 
     // const { proof, publicSignals } = await groth16.prove(sendzkey, witness);
-    // console.log("Proof: ", proof);
-    // console.log("Pub: ", publicSignals);
 
     const send = await groth16.fullProve(input, sendWasm, sendzkey);
 
@@ -105,11 +95,9 @@ describe("SendMessage", function () {
     const vKey = JSON.parse(readFileSync(sendvkey));
     const res = await groth16.verify(vKey, send.publicSignals, send.proof);
     const msgHash = send.publicSignals[0]
-    // console.log("msgHash: ", msgHash)
-    // console.log("Res: ", res)
+
 
     let calldata = await getCallData(send.proof, send.publicSignals);
-    // console.log(calldata);
 
     // Reveal Message
     const reveal_input = {
@@ -117,15 +105,12 @@ describe("SendMessage", function () {
         msgheader: formatMessage(msg),   
         msgHash
     };
-    // const { reveal_proof, reveal_publicSignals } 
     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
     
     const reveal_vKey = JSON.parse(readFileSync(revealvkey));
     const reveal_result = await groth16.verify(reveal_vKey, reveal.publicSignals, reveal.proof);
-    // console.log(reveal_result);
-    // assert(reveal_result == true)
+    assert(reveal_result == true)
     const calldata1 = await getCallData(reveal.proof, reveal.publicSignals);
-    // console.log(calldata1);
 
   });
 });

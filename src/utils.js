@@ -49,47 +49,6 @@ function unstringifyBigInts(o) {
     }
 }
 
-// const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
-
-// async function prove(inputs, circuitType) {
-//     let wasm;
-//     let zkey;
-//     inputs = stringifyBigInts(inputs);
-//     if (circuitType === 'send'){
-//         wasm = sendWasm;
-//         zkey = sendzkey;
-//     } 
-//     else {
-//         return { proof: null, publicSignals: null};
-//     }
-//     const { proof, publicSignals } = await groth16.fullProve(
-//         inputs,
-//         wasm,
-//         zkey,
-//     );
-    
-//     return {proof, publicSignals};
-    
-// }
-
-// async function verify(proof, publicSignals, circuitType) { 
-//     let vkeyFile;
-//     if (circuitType == 'send'){
-//         vkeyFile = sendVkey;
-//     } else {
-//         return null;
-//     }
-//     let resp = await fetch(vkeyFile);
-//     let vKey = await resp.json();
-//     const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-//     return res;
-//   }
-
-function keccak(str) { // ethers.utils.toUtf8Bytes(str)
-    return (BigInt(ethers.utils.solidityKeccak256(["string"], [str])% SNARK_FIELD_SIZE)).value;
-}
-
-
 function formatMessage(str) { 
     return BigInt((ethers.utils.solidityKeccak256(["string"], [str])) % SNARK_FIELD_SIZE);
 }
@@ -118,10 +77,7 @@ async function getCallData(proof, publicSignals){
 
 
 export {
-    // stringifyBigInts,
-    // prove,
-    // verify,
-    keccak,
+    stringifyBigInts,
     getCallData,
     formatMessage
 }

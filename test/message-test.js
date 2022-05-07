@@ -25,7 +25,6 @@ async function getCallData(proof, publicSignals){
         editedProof,
         editedPublicSignals
       );
-    //console.log(calldata);
     const calldataSplit = calldata.split(",");
     let _a = eval(calldataSplit.slice(0, 2).join());
     let _b = eval(calldataSplit.slice(2, 6).join());
@@ -75,7 +74,7 @@ describe("Message", function () {
         console.log("Message deployed to:", message.address);
     });
 
-  it("Send Message Hash to the contract", async function () {
+    it("Send Message Hash to the contract", async function () {
     const secret = BigInt(1);
     const msgheader = "the title";
     const msgbody = "This is the body";
@@ -86,7 +85,6 @@ describe("Message", function () {
     const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
     
     expect(await message.messages[0]).to.equal(undefined);
-    console.log(_input)
     const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
     var output = await message.messages(0);
     expect(output.isrevealed).to.equal(false);
@@ -96,8 +94,7 @@ describe("Message", function () {
   });
 
 
-
-   it("Reveal Message Hash from the contract", async function () {
+    it("Reveal Message Hash from the contract", async function () {
     const secret = BigInt(1);
     const msgheader = "the titlemessage header";
     const msgbody = "This is the body"; // this is stored off chain and retrived while revealing
@@ -120,7 +117,6 @@ describe("Message", function () {
         msgheader: formatMessage(msg),   
         msgHash
     };
-    console.log("reveal_input", reveal_input);
 
     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
     const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
@@ -130,7 +126,7 @@ describe("Message", function () {
 
   });
 
-  it("Send Multiple Messages and Reveal Message Hash from the contract", async function () {
+    it("Send Multiple Messages and Reveal Message Hash from the contract", async function () {
     const secret = BigInt(1);
     const msgheader = "the title";
     const msgbody = "This is the body"; // this is stored off chain and retrived while revealing
@@ -190,12 +186,11 @@ describe("Message", function () {
     expect(msgcount.toString()).to.equal("2");
 
     const allmsg = await message.getMessageStruct();
-    console.log(allmsg.toString())
 
   });
 
 
-it("Just for test", async function () {
+    it("Just for test", async function () {
     const secret = formatMessage("secret");
     const msgheader = "the title";
     const msgbody = "This is the body";
@@ -205,11 +200,6 @@ it("Just for test", async function () {
     const send = await groth16.fullProve(input, sendWasm, sendzkey);
     
     const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
-    console.log("a", _a);
-    console.log("b", _b);
-    console.log("c", _c);
-    console.log("input", _input);
-
     expect(await message.messages[0]).to.equal(undefined);
 
     const result = await message.sendMessage(msgheader, _a, _b, _c, _input);
@@ -226,11 +216,6 @@ it("Just for test", async function () {
     const reveal = await groth16.fullProve(reveal_input, revealWasm, revealzkey);
     const reveal_calldata = await getCallData(reveal.proof, reveal.publicSignals);
     const reveal_result = await message.revealMessage(msgbody, reveal_calldata._a, reveal_calldata._b, reveal_calldata._c, reveal_calldata._input);
-    console.log("msgHash", msgHash)
-    console.log("reveal_calldata._a",reveal_calldata._a, )
-    console.log("reveal_calldata._b", reveal_calldata._b)
-    console.log("reveal_calldata._c", reveal_calldata._c)
-    console.log("reveal_calldata._input", reveal_calldata._input)
 
     var output = await message.messages(0);
     expect(output.isrevealed).to.equal(true);
