@@ -10,8 +10,8 @@ const sendWasm = 'sendmessage/circuit.wasm';
 const revealzkey = 'revealmessage/circuit_final.zkey'
 const revealWasm = 'revealmessage/circuit.wasm';
 
-const contractAddress = "0xdf3c7B18d0CaCC49743FC6F2a2237AF297341736";
-// const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+// const contractAddress = "0xdf3c7B18d0CaCC49743FC6F2a2237AF297341736";
+const contractAddress = "0x90Cb84baB5699298122b90830fE7674ccB3109eA"; //mainnet
 
 const SNARK_FIELD_SIZE = BigInt(21888242871839275222246405745257275088548364400416034343698204186575808495617);
 

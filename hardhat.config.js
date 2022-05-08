@@ -34,7 +34,7 @@ module.exports = {
       url: `https://api.s0.b.hmny.io`,
       accounts: [`0x${process.env.HARMONY_PRIVATE_KEY}`],
     },
-    mainnet: {
+    harmony: {
       url: `https://api.harmony.one`,
       accounts: [`0x${process.env.HARMONY_PRIVATE_KEY}`]
     }
