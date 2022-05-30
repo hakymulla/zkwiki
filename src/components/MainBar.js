@@ -46,6 +46,15 @@ const MainBar = ({ accounts, setAccounts }) => {
         e.preventDefault();
         if (window.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
+            let provider_name = await provider.getNetwork()
+            console.log("provider", (provider_name['chainId']))
+            const chainIds = [1666600000]
+            if (provider_name['chainId'] != 1666600000){
+                alert("Change Your Metamask to Harmony Mainnet Network!")
+                return;
+
+            }
+
             const signer = provider.getSigner(accounts[0]);
             const contract = new ethers.Contract(
                 contractAddress,
@@ -53,19 +62,34 @@ const MainBar = ({ accounts, setAccounts }) => {
                 signer
             );
             try {
-                const secret_stringify = JSON.stringify({secret: secret});
-                const msg_stringify = JSON.stringify({msgheader: msgHeader});
-        
-                const input = {
-                    secret: Number(formatMessage(secret_stringify)),
-                    msgheader: Number(formatMessage(msg_stringify)),
-                };
+
+                const messagestruct =  await contract.getMessageStruct();
+                let header = [];
+                for (let i = 0; i < messagestruct[0].length+1; i++) {
+                    const header_item = messagestruct[0][i];
+                    header.push(header_item)
+                }
                 
-                const send = await groth16.fullProve(input, sendWasm, sendzkey);
-                const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
-                const msgHash = send.publicSignals[0]
-                const response = await contract.sendMessage(msgHeader,_a,_b,_c,_input);
-                localStorage.setItem(msgHeader, msgBody);
+                let isAvailable = header.includes(msgHeader)
+                if (isAvailable) {
+                    alert("Message Header Already Exists!")
+                }
+                else {
+                    const secret_stringify = JSON.stringify({secret: secret});
+                    const msg_stringify = JSON.stringify({msgheader: msgHeader});
+                                    
+                    const input = {
+                        secret: Number(formatMessage(secret_stringify)),
+                        msgheader: Number(formatMessage(msg_stringify)),
+                    };
+
+                    const send = await groth16.fullProve(input, sendWasm, sendzkey);
+                    const { _a, _b, _c, _input} = await getCallData(send.proof, send.publicSignals);
+                    const msgHash = send.publicSignals[0]
+                    const response = await contract.sendMessage(msgHeader,_a,_b,_c,_input);
+                    localStorage.setItem(msgHeader, msgBody);
+                }
+        
 
             } catch (err) {
                 console.log("ERROR:", err.message)
