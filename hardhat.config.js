@@ -20,15 +20,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+
+const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
+
+const MUMBAI_PRIVATE_KEY = process.env.MUMBAI_PRIVATE_KEY;
+
+const POLYGONSCAN_KEY = process.env.POLYGONSCAN_KEY;
+
 module.exports = {
   solidity: "0.8.4",
-  networks:{
+  networks: {
     hardhat: {
       chainId: 1337
     },
     rinkeby: {
       url: process.env.REACT_APP_RINKEBY_RPC_URL,
-      accounts:[process.env.REACT_APP_PRIVATE_KEY],
+      accounts: [process.env.REACT_APP_PRIVATE_KEY],
     },
     testnet: {
       url: `https://api.s0.b.hmny.io`,
@@ -37,12 +44,17 @@ module.exports = {
     harmony: {
       url: `https://api.harmony.one`,
       accounts: [`0x${process.env.HARMONY_PRIVATE_KEY}`]
-    }
+    },
+    mumbai: {
+      url: ALCHEMY_API_KEY_URL,
+      accounts: [MUMBAI_PRIVATE_KEY],
+    },
   },
   etherscan: {
-    apiKey: process.env.REACT_APP_ETHERSCAN_KEY,
+    // apiKey: process.env.REACT_APP_ETHERSCAN_KEY,
+    apiKey: POLYGONSCAN_KEY,
   },
-  paths:{
+  paths: {
     artifacts: "./src/public/artifacts"
   },
 };
